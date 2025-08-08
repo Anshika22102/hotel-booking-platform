@@ -1,90 +1,131 @@
-# Hotel Room Booking Platform
+# 🏨 Hotel Room Booking Platform (Flask)
 
-## Problem Statement
+## 📁 Problem Statement
 
-Build a hotel room booking system with the following features:
+Build a full-stack hotel room booking system with the following features:
 
-1. Create Hotels and Rooms with room types and prices.
+1. Create Hotels and Rooms with types, prices, and availability.
 2. Book rooms for specific date ranges.
-3. Prevent double booking (overlapping date ranges).
-4. Search hotels by city or name.
-5. Demonstrate performance with 1M mock hotels.
-6. Include test cases to validate behavior.
+3. Prevent double bookings (overlapping dates).
+4. Search hotels by city, name, or tourist keyword (e.g., “Tajmahal” → Agra).
+5. Auto-release rooms after checkout time.
+6. Dashboard for hotel managers to view ongoing bookings and revenue.
+7. Apply discounts via 1-time or multiple-use coupons.
+8. Document database schema.
+9. Provide Postman collection for testing.
 
 ---
 
-## My Approach
+## 💡 My Approach
 
-- Modeled `Hotel`, `Room`, and `Booking` using simple Python classes.
-- Used `threading.Lock` to handle concurrency and prevent double bookings.
-- Wrote in-memory search logic using efficient list filters.
-- Simulated 1M hotel data using a loop for performance testing.
-- Wrote 3 test cases:
-  - Simultaneous room booking
-  - Booking with same check-in/out date
-  - Search hotels by city or name
+- **Framework**: Flask with SQLAlchemy ORM for persistence.
+- **Models**: `Hotel`, `Room`, `Booking`, `Coupon`, and `Manager`.
+- **Search**: Supports name, city, and keyword→city mapping.
+- **Concurrency**: Prevents overlapping bookings at DB query level.
+- **Coupons**: Best applicable coupon applied automatically (optional input).
+- **Background Job**: Thread checks every minute to mark rooms as available after checkout.
+- **Manager Dashboard**: HTML (Jinja2) template to show bookings and revenue in real-time.
+- **Documentation**: Added `schema.md` and `postman_collection.json`.
 
 ---
 
-## Setup Instructions
+## 🔧 Setup Instructions
 
-### Prerequisites
+### ✅ Prerequisites
 - Python 3.8+
-- Git (to clone the repo)
+- pip
+- Git
 
-### Clone Repository
+### 🔄 Clone Repository
 ```bash
 git clone https://github.com/YOUR_USERNAME/hotel-booking-platform.git
 cd hotel-booking-platform
 ```
 
-### Run the Project
+### 📦 Install Dependencies
 ```bash
-python hotel_booking_platform.py
+pip install -r requirements.txt
 ```
 
-### Run Test Cases
-Test cases run automatically when you execute the file.
-Uncomment the mock data section to benchmark performance.
+### 🗄 Initialize Database
+```bash
+export FLASK_APP=run.py
+flask db init
+flask db migrate -m "init"
+flask db upgrade
+```
+
+### ⚡ Run the Project
+```bash
+python run.py
+```
+The server will start at `http://127.0.0.1:5000`
 
 ---
 
-## Complex Logic Explanation
+## 📊 Postman Collection
+Import `postman_collection.json` into Postman to test APIs:
+- Create hotel
+- Add room
+- Search hotels
+- Book room
+- View dashboard stats
 
-### Booking Conflict Detection
+---
+
+## 🧠 Complex Logic Explanation
+
+### ✅ Booking Conflict Detection
+Bookings are rejected if any existing booking overlaps with the requested check-in/out date range:
 ```python
-def is_available(self, start_date, end_date):
-    for booking in self.bookings:
-        if not (end_date <= booking.start_date or start_date >= booking.end_date):
-            return False
-    return True
+if overlaps(room_id, start_dt, end_dt):
+    return jsonify({'error': 'Room already booked'}), 409
 ```
 
-### Thread-Safety via Lock
+### 🕒 Auto Room Release
+A background thread runs every 60 seconds:
 ```python
-with self.lock:
-    if self.is_available(...):
-        # safe to book
+if booking.check_out <= now and no future bookings:
+    room.is_available = True
+```
+
+### 🔍 Smart Search
+Keyword mapping for popular tourist spots:
+```python
+'tajmahal' → 'agra'
+'redfort' → 'delhi'
+'gateway' → 'mumbai'
+'beach' → 'goa'
 ```
 
 ---
 
-## Loom Video Walkthrough
-
-### [🔗 Click to Watch on Loom](https://www.loom.com/share/f28b0df885a941be8a8fba812dca1444?sid=c03b8c2a-ea4f-4ebe-b369-c19720f9cf7c)
+## 🖥 Manager Dashboard
+Accessible at:
+```
+/dashboard/manager/<hotel_id>
+```
+Displays:
+- Hotel details
+- Ongoing bookings
+- Total revenue
 
 ---
 
-## 🧾 Deliverables
+## 📂 Deliverables
+- [x] Persistent DB (SQLite)
+- [x] REST APIs with Flask
+- [x] Improved search logic
+- [x] Manager dashboard
+- [x] Auto room availability
+- [x] Coupon discounts
+- [x] DB schema documentation
+- [x] Postman collection
 
-- [x] Hotel and Room Models
-- [x] Booking with Overlap Prevention
-- [x] Search Function
-- [x] Handle 1M Mock Hotels
-- [x] 3 Test Cases
-- [x] Code Comments
-- [ ] Flask API (optional future work)
-- [ ] UI / Dashboard (optional future work)
+---
+
+## 🎥 Loom Video Walkthrough
+[🔗 Watch Video](https://www.loom.com/share/68a8cf69bde24bcbb1fefb4753b6c52c?sid=b1918cda-9c5e-447a-b20b-dd692476bf5e)
 
 ---
 

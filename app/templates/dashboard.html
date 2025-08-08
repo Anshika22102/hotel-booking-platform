@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+  <title>Manager Dashboard - {{ hotel.name }}</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { padding: 8px; border: 1px solid #ccc; text-align: left; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Manager Dashboard - {{ hotel.name }} ({{ hotel.city }})</h1>
+    <h2>Revenue: ${{ '%.2f'|format(revenue) }}</h2>
+    <h3>Ongoing Bookings</h3>
+    <table>
+      <tr><th>Booking ID</th><th>Room ID</th><th>Guest</th><th>Check In</th><th>Check Out</th><th>Total</th></tr>
+      {% for b in ongoing %}
+      <tr>
+        <td>{{ b.id }}</td>
+        <td>{{ b.room_id }}</td>
+        <td>{{ b.guest_name }}</td>
+        <td>{{ b.check_in }}</td>
+        <td>{{ b.check_out }}</td>
+        <td>{{ b.total_price }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</body>
+</html>

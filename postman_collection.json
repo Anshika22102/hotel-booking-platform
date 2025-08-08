@@ -1,0 +1,86 @@
+{
+  "info": {
+    "name": "Hotel Booking API",
+    "_postman_id": "1234",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create Hotel",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Oceanview\",\"city\":\"Goa\"}"
+        },
+        "url": {
+          "raw": "http://localhost:5000/hotels/"
+        }
+      }
+    },
+    {
+      "name": "Add Room",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"room_type\":\"Single\",\"price\":1000}"
+        },
+        "url": {
+          "raw": "http://localhost:5000/hotels/1/rooms"
+        }
+      }
+    },
+    {
+      "name": "Search Hotels",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/hotels/search?keyword=tajmahal"
+        }
+      }
+    },
+    {
+      "name": "Book Room",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"room_id\":1,\"guest_name\":\"John\",\"check_in\":\"2025-08-01T14:00:00\",\"check_out\":\"2025-08-03T11:00:00\"}"
+        },
+        "url": {
+          "raw": "http://localhost:5000/bookings/book"
+        }
+      }
+    },
+    {
+      "name": "Manager Dashboard",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/dashboard/manager/1"
+        }
+      }
+    }
+  ]
+}
